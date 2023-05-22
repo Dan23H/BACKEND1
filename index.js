@@ -2,10 +2,14 @@ const express = require("express");
 require('dotenv').config();
 const cors = require('cors');
 app.use('/', require('./routes/auth'))
+const { dbConnection } = require('./database/config')
 
 //Crear Express App
 const app = express();
 app.use(cors());
+
+//Database
+dbConnection()
 
 //Para que escuche el body
 const bodyParser = require('body-parser');
@@ -15,7 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'))
 
 //Rutas
-app.get('/api', (req, res) => {
+app.use('/',require('./routes/auth'))
+app.get('/test', (req, res) => {
     res.json({message: "FUNCIONAAAAA"});
 })
 
@@ -23,5 +28,5 @@ app.get('/api', (req, res) => {
 
 //Escuchar en puerto 3001
 app.listen(process.env.PORT, () => {
-    console.log('Servidor corriendo en puerto ', process.env.PORT)
-})
+    Puerto = process.env.PORT
+    console.log(`Servidor corriendo en puerto: ${Puerto}`)
