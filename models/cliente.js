@@ -24,7 +24,7 @@ const ClienteScheme = Schema({
 
 ClienteScheme.virtual('imagenes', {
     ref: "Image",
-    localfield: "_id",
+    localField: "_id",
     foreignField: "client",
     justOne: false
 })
