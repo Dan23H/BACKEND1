@@ -26,7 +26,7 @@ const mensajes = (req, res) => {
 }
 
 const enviarMensaje = (req, res) => {
-    const {para, asunto, descripción} = req.body;
+    const {para, asunto, descripcion} = req.body;
 }
 //---------------FIN MENSAJES------------------------------
 
