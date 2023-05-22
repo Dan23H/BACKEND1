@@ -26,7 +26,7 @@ app.get('/test', (req, res) => {
 
 //app.use('/api/auth', require('./routes/auth'))
 
-//Escuchar en puerto 3001
+//Escuchar en puerto 4000
 app.listen(process.env.PORT, () => {
     Puerto = process.env.PORT
     console.log(`Servidor corriendo en puerto: ${Puerto}`)
