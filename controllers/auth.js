@@ -5,9 +5,9 @@ const Cliente = require('../models/cliente')
 const registro = async (req, res = express.request) => {
     const { nombre, correo, contraseña, confirmarContraseña } = req.body;
     try {
-        let usuario = await Cliente.findOne({ correo: correo })
+        let usuario = await Cliente.findOne({ email: correo })
         if (!usuario) {
-            usuario = await Cliente.findOne({ nombre: nombre })
+            usuario = await Cliente.findOne({ name: nombre })
         }
         if (usuario) {
             return res.status(400).json({
@@ -15,12 +15,16 @@ const registro = async (req, res = express.request) => {
                 msg: "Ese usuario o correo ya existe"
             })
         }
+        const user = new Cliente({ name: nombre, email: correo, password: contraseña })
+        await user.save().then(() => console.log('Usuario Guardado Exitósamente'))
 
-        res.status(200).json({
-            ok: true,
-            usuario
-        })
-    } catch(error) {
+        return (
+            res.status(200).json({
+                ok: true
+            })
+        )
+
+    } catch (error) {
         console.log(error)
         res.status(500).json({
             ok: false,
@@ -30,67 +34,67 @@ const registro = async (req, res = express.request) => {
 }
 
 const login = (req, res = express.request) => {
-        const { nombre, contraseña } = req.body;
-        res.status(200).json({
-            ok: true,
-            usuario
-        })
-    }
-    //------------FIN PANTALLA DE LOGIN O REGISTRO--------------------------
+    const { nombre, contraseña } = req.body;
+    res.status(200).json({
+        ok: true,
+        usuario
+    })
+}
+//------------FIN PANTALLA DE LOGIN O REGISTRO--------------------------
 
-    //------------PERFIL----------------------------------------
-    const perfil = (req, res = express.request) => {
-        const { fotoPerfil, portada } = req.body;
-        res.status(200).json({
-            ok: true,
-            profile
-        })
-    }
+//------------PERFIL----------------------------------------
+const perfil = (req, res = express.request) => {
+    const { fotoPerfil, portada } = req.body;
+    res.status(200).json({
+        ok: true,
+        profile
+    })
+}
 
-    const editarPerfil = (req, res = express.request) => {
-        const { nombre, pais, fotoPerfil, portada } = req.body;
-        res.status(200).json({
-            ok: true,
-            editProfile
-        })
-    }
-    //--------------FIN PERFIL---------------------------------
+const editarPerfil = (req, res = express.request) => {
+    const { nombre, pais, fotoPerfil, portada } = req.body;
+    res.status(200).json({
+        ok: true,
+        editProfile
+    })
+}
+//--------------FIN PERFIL---------------------------------
 
-    //----------------MENSAJES---------------------------------
-    const mensajes = (req, res = express.request) => {
-        const { fotoPerfil, usuario, asunto } = req.body;
-        res.status(200).json({
-            ok: true,
-            messages
-        })
-    }
+//----------------MENSAJES---------------------------------
+const mensajes = (req, res = express.request) => {
+    const { fotoPerfil, usuario, asunto } = req.body;
+    res.status(200).json({
+        ok: true,
+        messages
+    })
+}
 
-    const enviarMensaje = (req, res = express.request) => {
-        const { destinatario, asunto, descripcion } = req.body;
-        res.status(200).json({
-            ok: true,
-            sendMsg
-        })
-    }
-    //---------------FIN MENSAJES------------------------------
+const enviarMensaje = (req, res = express.request) => {
+    const { destinatario, asunto, descripcion } = req.body;
+    res.status(200).json({
+        ok: true,
+        sendMsg
+    })
+}
+//---------------FIN MENSAJES------------------------------
 
-    //----------------NOTIFICACIONES---------------------------
-    const notificacion = (req, res = express.request) => {
-        const { imagen, descripcion } = req.body;
-        res.status(200).json({
-            ok: true,
-            notification
-        })
-    }
-    //----------------FIN NOTIFICACIONES-----------------------
+//----------------NOTIFICACIONES---------------------------
+const notificacion = (req, res = express.request) => {
+    const { imagen, descripcion } = req.body;
+    res.status(200).json({
+        ok: true,
+        notification
+    })
+}
+//----------------FIN NOTIFICACIONES-----------------------
 
-    //------------------------EXPORTS--------------------------
-    module.exports = {
-        registro,
-        login,
-        perfil,
-        editarPerfil,
-        mensajes,
-        enviarMensaje,
-        notificacion
-    }
+//------------------------EXPORTS--------------------------
+module.exports = {
+    registro,
+    login,
+    perfil,
+    editarPerfil,
+    mensajes,
+    enviarMensaje,
+    notificacion
+}

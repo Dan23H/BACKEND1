@@ -17,5 +17,6 @@ app.use('/',require('./routes/auth'))
 
 // Escuchar en puerto 4000
 app.listen(process.env.PORT, () => {
-    console.log("Servidore corriendo en puerto ",process.env.PORT)
+    Puerto = process.env.PORT
+    console.log(`Servidor corriendo en puerto: ${Puerto}`)
 })

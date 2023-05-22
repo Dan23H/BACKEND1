@@ -8,7 +8,7 @@ const dbConnection = async() => {
         console.log('DB Online')
     } catch(error) {
         console.log(error)
-        throw new Error('Error al coneectar en DB')
+        throw new Error('Error al conectar en DB')
     }
 }
 module.exports = { dbConnection }
