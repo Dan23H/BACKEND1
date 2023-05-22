@@ -1,7 +1,7 @@
 const express = require('express');
 const {validationResult} = require('express-validator')
 
-const validaciones = (req, res) => {
+const validaciones = (req, res = express.response, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(400).json({

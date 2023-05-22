@@ -1,8 +1,8 @@
 const express = require('express');
-const Cliente = require('../models/Cliente')
+const Cliente = require('../models/cliente')
 
 //------------PANTALLA DE LOGIN O REGISTRO-----------------------------
-const registro = (req, res = express.request) => {
+const registro = async (req, res = express.request) => {
     const { nombre, correo, contraseña, confirmarContraseña } = req.body;
     try {
         let usuario = await Cliente.findOne({ correo: correo })
@@ -27,6 +27,7 @@ const registro = (req, res = express.request) => {
             error
         })
     }
+}
 
 const login = (req, res = express.request) => {
         const { nombre, contraseña } = req.body;
