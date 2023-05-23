@@ -12,6 +12,6 @@ router.get("/messages",mensajes)
 router.post("/messages",enviarMensaje)
 router.get("/notifications",notificacion)
 
-router.post("/subirImagen", subirImagen)
+router.post("/subirimagen", subirImagen)
 
 module.exports = router
