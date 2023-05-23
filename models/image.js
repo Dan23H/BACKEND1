@@ -19,6 +19,13 @@ const ImageScheme = Schema({
         ref: 'Cliente'
     }
     
+},{
+    toJSON: {
+        virtuals: true
+    },
+    toObject: {
+        virtuals: true
+    }
 })
 
 ImageScheme.method('toJSON', function() {
