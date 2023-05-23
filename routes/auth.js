@@ -2,14 +2,16 @@ const express = require('express')
 const router = express.Router()
 
 const {registro, login, perfil, editarPerfil, mensajes,
-    enviarMensaje, notificacion} = require('../controllers/auth')
+    enviarMensaje, notificacion, subirImagen} = require('../controllers/auth')
 
 router.post("/register",registro)
 router.post("/login",login)
 router.get("/profile",perfil)
-router.post("/editprofile",editarPerfil)
+router.put("/profile",editarPerfil)
 router.get("/messages",mensajes)
-router.post("/sendMessages",enviarMensaje)
+router.post("/messages",enviarMensaje)
 router.get("/notifications",notificacion)
+
+router.post("/subirImagen", subirImagen)
 
 module.exports = router

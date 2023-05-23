@@ -1,5 +1,6 @@
 const express = require('express');
 const Cliente = require('../models/cliente')
+const Imagen = require('../models/image');
 
 //------------PANTALLA DE LOGIN O REGISTRO-----------------------------
 const registro = async (req, res = express.request) => {
@@ -15,7 +16,7 @@ const registro = async (req, res = express.request) => {
                 msg: "Ese usuario o correo ya existe"
             })
         }
-        const user = new Cliente({ name: nombre, email: correo, password: contraseña })
+        const user = new Cliente({ name: nombre, email: correo, password: contraseña, country: "", photo: "", frontPage: "" })
         await user.save().then(() => console.log('Usuario Guardado Exitósamente'))
 
         return (
@@ -33,30 +34,99 @@ const registro = async (req, res = express.request) => {
     }
 }
 
-const login = (req, res = express.request) => {
-    const { nombre, contraseña } = req.body;
-    res.status(200).json({
-        ok: true,
-        usuario
-    })
+const login = async (req, res = express.request) => {
+    const { nombre, correo, contraseña } = req.body;
+    try {
+        let usuario = await Cliente.findOne({ name: nombre })
+        if (!usuario) {
+            usuario = await Cliente.findOne({ email: correo })
+        }
+        if (!usuario) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Ese usuario no está registrado."
+            })
+        }
+        return (
+            res.status(200).json({
+                ok: true,
+                usuario
+            })
+        )
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            ok: false,
+            error
+        })
+    }
 }
 //------------FIN PANTALLA DE LOGIN O REGISTRO--------------------------
 
 //------------PERFIL----------------------------------------
-const perfil = (req, res = express.request) => {
-    const { fotoPerfil, portada } = req.body;
-    res.status(200).json({
-        ok: true,
-        profile
-    })
+const perfil = async (req, res = express.request) => {
+    const { correo } = req.query;
+    try {
+        const profile = await Cliente.findOne({ email: correo })
+        console.log(profile)
+        console.log(profile.name)
+        console.log(profile.photo)
+        console.log(profile.frontPage)
+        if (!profile) {
+            return res.status(404).json({
+                ok: false,
+                msg: "Usuario no encontrado"
+            })
+        }
+        res.status(200).json({
+            ok: true,
+            profile: {
+                name: profile.name,
+                photo: profile.photo,
+                frontPage: profile.frontPage
+            }
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            error
+        })
+    }
+
 }
 
-const editarPerfil = (req, res = express.request) => {
-    const { nombre, pais, fotoPerfil, portada } = req.body;
-    res.status(200).json({
-        ok: true,
-        editProfile
-    })
+const editarPerfil = async (req, res = express.request) => {
+    const { correo, pais, foto, portada } = req.body;
+
+    try {
+        const upProfile = await Cliente.findOneAndUpdate(
+            { email: correo },
+            { $set: { photo: foto, frontPage: portada, country: pais } },
+            { new: true }
+        )
+        if (!upProfile) {
+            return res.status(404).json({
+                ok: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+        
+        res.status(200).json({
+            ok: true,
+            editedProfile: {
+                name: upProfile.name,
+                photo: upProfile.photo,
+                frontPage: upProfile.frontPage,
+                country: upProfile.country
+            }
+        })
+        upProfile = await upProfile.save();
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            error: error.message
+        })
+    }
 }
 //--------------FIN PERFIL---------------------------------
 
@@ -88,6 +158,32 @@ const notificacion = (req, res = express.request) => {
 }
 //----------------FIN NOTIFICACIONES-----------------------
 
+const subirImagen = async (req, res) => {
+    const { categoria, descripcion, imagen, userId } = req.body;
+    console.log('categoria');  
+    try {
+      const nuevaImagen = new Imagen({
+        categoria,
+        descripcion,
+        imagen,
+        user: userId,
+      });
+  
+      await nuevaImagen.save();
+  
+      res.status(200).json({
+        ok: true,
+        message: 'Imagen subida exitosamente',
+        imagen: nuevaImagen,
+      });
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  };
+
 //------------------------EXPORTS--------------------------
 module.exports = {
     registro,
@@ -96,5 +192,6 @@ module.exports = {
     editarPerfil,
     mensajes,
     enviarMensaje,
-    notificacion
+    notificacion,
+    subirImagen
 }

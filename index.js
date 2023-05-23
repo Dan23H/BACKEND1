@@ -1,7 +1,6 @@
 const express = require("express");
 require('dotenv').config();
 const cors = require('cors');
-app.use('/', require('./routes/auth'))
 const { dbConnection } = require('./database/config')
 
 //Crear Express App
@@ -15,11 +14,13 @@ dbConnection()
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(express.static('public'))
 
 //Rutas
 app.use('/',require('./routes/auth'))
+//app.use('/images', require('./routes/image'));
 app.get('/test', (req, res) => {
     res.json({message: "FUNCIONAAAAA"});
 })
