@@ -7,9 +7,9 @@ const {registro, login, perfil, editarPerfil, mensajes,
 router.post("/register",registro)
 router.post("/login",login)
 router.get("/profile",perfil)
-router.put("/editprofile",editarPerfil)
+router.put("/profile",editarPerfil)
 router.get("/messages",mensajes)
-router.post("/sendMessages",enviarMensaje)
+router.post("/messages",enviarMensaje)
 router.get("/notifications",notificacion)
 
 module.exports = router
