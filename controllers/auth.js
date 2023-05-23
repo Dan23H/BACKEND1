@@ -15,7 +15,7 @@ const registro = async (req, res = express.request) => {
                 msg: "Ese usuario o correo ya existe"
             })
         }
-        const user = new Cliente({ name: nombre, email: correo, password: contraseña })
+        const user = new Cliente({ name: nombre, email: correo, password: contraseña, country: "", photo: "", frontPage: "" })
         await user.save().then(() => console.log('Usuario Guardado Exitósamente'))
 
         return (
@@ -67,6 +67,10 @@ const perfil = async (req, res = express.request) => {
     const { correo } = req.query;
     try {
         const profile = await Cliente.findOne({ email: correo })
+        console.log(profile)
+        console.log(profile.name)
+        console.log(profile.photo)
+        console.log(profile.frontPage)
         if (!profile) {
             return res.status(404).json({
                 ok: false,
@@ -84,18 +88,44 @@ const perfil = async (req, res = express.request) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
+            error
+        })
+    }
+
+}
+
+const editarPerfil = async (req, res = express.request) => {
+    const { correo, pais, foto, portada } = req.body;
+
+    try {
+        const upProfile = await Cliente.findOneAndUpdate(
+            { email: correo },
+            { $set: { photo: foto, frontPage: portada, country: pais } },
+            { new: true }
+        )
+        if (!upProfile) {
+            return res.status(404).json({
+                ok: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+        
+        res.status(200).json({
+            ok: true,
+            editedProfile: {
+                name: upProfile.name,
+                photo: upProfile.photo,
+                frontPage: upProfile.frontPage,
+                country: upProfile.country
+            }
+        })
+        upProfile = await upProfile.save();
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
             error: error.message
         })
     }
-    
-}
-
-const editarPerfil = (req, res = express.request) => {
-    const { nombre, pais, foto, portada } = req.body;
-    res.status(200).json({
-        ok: true,
-        editProfile
-    })
 }
 //--------------FIN PERFIL---------------------------------
 
