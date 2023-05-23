@@ -1,5 +1,6 @@
 const express = require('express');
 const Cliente = require('../models/cliente')
+const Imagen = require('../models/image');
 
 //------------PANTALLA DE LOGIN O REGISTRO-----------------------------
 const registro = async (req, res = express.request) => {
@@ -157,6 +158,32 @@ const notificacion = (req, res = express.request) => {
 }
 //----------------FIN NOTIFICACIONES-----------------------
 
+const subirImagen = async (req, res) => {
+    const { categoria, descripcion, imagen, userId } = req.body;
+    console.log('categoria');  
+    try {
+      const nuevaImagen = new Imagen({
+        categoria,
+        descripcion,
+        imagen,
+        user: userId,
+      });
+  
+      await nuevaImagen.save();
+  
+      res.status(200).json({
+        ok: true,
+        message: 'Imagen subida exitosamente',
+        imagen: nuevaImagen,
+      });
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  };
+
 //------------------------EXPORTS--------------------------
 module.exports = {
     registro,
@@ -165,5 +192,6 @@ module.exports = {
     editarPerfil,
     mensajes,
     enviarMensaje,
-    notificacion
+    notificacion,
+    subirImagen
 }
