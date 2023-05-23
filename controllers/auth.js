@@ -59,19 +59,14 @@ const login = async (req, res = express.request) => {
             error
         })
     }
-    res.status(200).json({
-        ok: true,
-        usuario
-    })
 }
 //------------FIN PANTALLA DE LOGIN O REGISTRO--------------------------
 
 //------------PERFIL----------------------------------------
 const perfil = async (req, res = express.request) => {
-    const { nombre } = req.query;
+    const { correo } = req.query;
     try {
-        const profile = await Cliente.findOne({ name: nombre }, { name: 1, photo: 1, frontPage: 1 })
-        console.log(profile)
+        const profile = await Cliente.findOne({ email: correo })
         if (!profile) {
             return res.status(404).json({
                 ok: false,
