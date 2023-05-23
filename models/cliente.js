@@ -12,6 +12,18 @@ const ClienteScheme = Schema({
     password: {
         type: String,
         required: true
+    },
+    photo: {
+        type: String,
+        required: false
+    },
+    frontPage: {
+        type: String,
+        required: false
+    },
+    country: {
+        type: String,
+        required: false
     }
 },{
     toJSON: {

@@ -7,7 +7,7 @@ const {registro, login, perfil, editarPerfil, mensajes,
 router.post("/register",registro)
 router.post("/login",login)
 router.get("/profile",perfil)
-router.post("/editprofile",editarPerfil)
+router.put("/editprofile",editarPerfil)
 router.get("/messages",mensajes)
 router.post("/sendMessages",enviarMensaje)
 router.get("/notifications",notificacion)

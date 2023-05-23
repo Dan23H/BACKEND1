@@ -33,8 +33,32 @@ const registro = async (req, res = express.request) => {
     }
 }
 
-const login = (req, res = express.request) => {
-    const { nombre, contraseña } = req.body;
+const login = async (req, res = express.request) => {
+    const { nombre, correo, contraseña } = req.body;
+    try {
+        let usuario = await Cliente.findOne({ name: nombre })
+        if (!usuario) {
+            usuario = await Cliente.findOne({ email: correo })
+        }
+        if (!usuario) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Ese usuario no está registrado."
+            })
+        }
+        return (
+            res.status(200).json({
+                ok: true,
+                usuario
+            })
+        )
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            ok: false,
+            error
+        })
+    }
     res.status(200).json({
         ok: true,
         usuario
@@ -43,16 +67,36 @@ const login = (req, res = express.request) => {
 //------------FIN PANTALLA DE LOGIN O REGISTRO--------------------------
 
 //------------PERFIL----------------------------------------
-const perfil = (req, res = express.request) => {
-    const { fotoPerfil, portada } = req.body;
-    res.status(200).json({
-        ok: true,
-        profile
-    })
+const perfil = async (req, res = express.request) => {
+    const { nombre } = req.query;
+    try {
+        const profile = await Cliente.findOne({ name: nombre }, { name: 1, photo: 1, frontPage: 1 })
+        console.log(profile)
+        if (!profile) {
+            return res.status(404).json({
+                ok: false,
+                msg: "Usuario no encontrado"
+            })
+        }
+        res.status(200).json({
+            ok: true,
+            profile: {
+                name: profile.name,
+                photo: profile.photo,
+                frontPage: profile.frontPage
+            }
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            error: error.message
+        })
+    }
+    
 }
 
 const editarPerfil = (req, res = express.request) => {
-    const { nombre, pais, fotoPerfil, portada } = req.body;
+    const { nombre, pais, foto, portada } = req.body;
     res.status(200).json({
         ok: true,
         editProfile
