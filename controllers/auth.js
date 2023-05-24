@@ -184,6 +184,31 @@ const subirImagen = async (req, res) => {
     }
   };
 
+  const verImagen = async (req, res) => {
+    const imagenId = req.params.id;
+  
+    try {
+      const imagen = await Imagen.findById(imagenId);
+  
+      if (!imagen) {
+        return res.status(404).json({
+          ok: false,
+          error: 'Imagen no encontrada',
+        });
+      }
+  
+      res.json({
+        ok: true,
+        imagen,
+      });
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  };
+
 //------------------------EXPORTS--------------------------
 module.exports = {
     registro,
@@ -193,5 +218,6 @@ module.exports = {
     mensajes,
     enviarMensaje,
     notificacion,
-    subirImagen
+    subirImagen,
+    verImagen
 }
