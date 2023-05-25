@@ -29,6 +29,6 @@ app.get('/test', (req, res) => {
 
 //Escuchar en puerto 4000
 app.listen(process.env.PORT, () => {
-    Puerto = process.env.PORT
+    Puerto = process.env.PORT || 4000
     console.log(`Servidor corriendo en puerto: ${Puerto}`)
 })
