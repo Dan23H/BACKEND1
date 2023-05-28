@@ -41,4 +41,11 @@ ClienteScheme.virtual('imagenes', {
     justOne: false
 })
 
+ClienteScheme.virtual('comentarios', {
+    ref: "Comment",
+    localField: "_id",
+    foreignField: "client",
+    justOne: false
+})
+
 module.exports = model("Cliente", ClienteScheme)

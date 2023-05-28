@@ -159,15 +159,20 @@ const notificacion = (req, res = express.request) => {
 //----------------FIN NOTIFICACIONES-----------------------
 
 const subirImagen = async (req, res) => {
-    const { categoria, descripcion, imagen, userId } = req.body;
-    console.log('categoria');  
+        const { categoria, descripcion } = req.body;
+        const imageData = req.file.buffer; // Contenido binario de la imagen
+        const contentType = req.file.mimetype; // Tipo de contenido de la imagen
+    
     try {
-      const nuevaImagen = new Imagen({
-        categoria,
-        descripcion,
-        imagen,
-        user: userId,
-      });
+        const nuevaImagen = new Imagen({
+            categoria,
+            descripcion,
+            imagen: {
+                data: imageData,
+                contentType
+            },
+            client: 'ID del cliente asociado'
+        });
   
       await nuevaImagen.save();
   

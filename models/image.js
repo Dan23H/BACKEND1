@@ -11,10 +11,11 @@ const ImageScheme = Schema({
         required: true
     },
     imagen: {
-        type: String,
+        data: Buffer,
+        contentType: String,
         required: true
     },
-    user: {
+    client: {
         type: Schema.Types.ObjectId,
         ref: 'Cliente'
     }
@@ -30,8 +31,15 @@ const ImageScheme = Schema({
 
 ImageScheme.method('toJSON', function() {
     const {__v,_id,...object} = this.toObject()
-    object.io = _id
+    object.id = _id
     return object
+})
+
+CommentScheme.virtual('comentarios', {
+    ref: "Comment",
+    localField: "_id",
+    foreignField: "image",
+    justOne: false
 })
 
 module.exports = model('Image', ImageScheme)
