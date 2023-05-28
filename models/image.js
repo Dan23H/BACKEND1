@@ -15,12 +15,20 @@ const ImageScheme = Schema({
         contentType: String,
         required: true
     },
+    likes: {
+        data: Number,
+        required: true
+    },
+    dislikes: {
+        type: Number,
+        required: true
+    },
     client: {
         type: Schema.Types.ObjectId,
         ref: 'Cliente'
     }
-    
-},{
+
+}, {
     toJSON: {
         virtuals: true
     },
@@ -29,8 +37,8 @@ const ImageScheme = Schema({
     }
 })
 
-ImageScheme.method('toJSON', function() {
-    const {__v,_id,...object} = this.toObject()
+ImageScheme.method('toJSON', function () {
+    const { __v, _id, ...object } = this.toObject()
     object.id = _id
     return object
 })
