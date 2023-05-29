@@ -1,5 +1,10 @@
 const express = require('express')
+const multer = require('multer');
+const sharp = require('sharp');
+
 const router = express.Router()
+// const upload = require('../libs/storage')
+const upload = multer();
 
 const {registro, login, perfil, editarPerfil, mensajes,
     enviarMensaje, notificacion, subirImagen, verImagen} = require('../controllers/auth')
@@ -12,7 +17,7 @@ router.get("/messages",mensajes)
 router.post("/messages",enviarMensaje)
 router.get("/notifications",notificacion)
 
-router.post("/subirimagen", subirImagen)
+router.post("/subirimagen", upload.single('imagen'), subirImagen)
 router.get("/verimagen/:id", verImagen)
 
 module.exports = router

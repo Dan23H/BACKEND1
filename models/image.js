@@ -11,6 +11,7 @@ const ImageScheme = Schema({
         required: true
     },
     imagen: {
+        data: Buffer,
         type: String,
         required: true
     },

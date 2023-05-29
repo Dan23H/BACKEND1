@@ -160,12 +160,16 @@ const notificacion = (req, res = express.request) => {
 
 const subirImagen = async (req, res) => {
     const { categoria, descripcion, imagen, userId } = req.body;
-    console.log('categoria');  
+    const imagenBuffer = req.file.buffer;
+
+    console.log(categoria);  
+    console.log(descripcion);
+    console.log(imagen)
     try {
       const nuevaImagen = new Imagen({
         categoria,
         descripcion,
-        imagen,
+        imagen: imagenBuffer,
         user: userId,
       });
   
