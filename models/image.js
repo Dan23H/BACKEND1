@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, default: mongoose } = require('mongoose')
 
-const ImageScheme = Schema({
+const ImageScheme = new mongoose.Schema({
 
     categoria: {
         type: String,
@@ -11,9 +11,14 @@ const ImageScheme = Schema({
         required: true
     },
     imagen: {
-        data: Buffer,
-        type: String,
-        required: true
+        data: {
+            type: Buffer,
+            required: true
+        },
+        contentType: {
+            type: String,
+            reqwuired: true
+        }
     },
     user: {
         type: Schema.Types.ObjectId,

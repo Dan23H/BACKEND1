@@ -1,6 +1,7 @@
 const express = require('express');
-const Cliente = require('../models/cliente')
-const Imagen = require('../models/image');
+const Cliente = require('../models/cliente');
+const Image = require('../models/image');
+const upload = require('../libs/storage');
 
 //------------PANTALLA DE LOGIN O REGISTRO-----------------------------
 const registro = async (req, res = express.request) => {
@@ -159,8 +160,31 @@ const notificacion = (req, res = express.request) => {
 //----------------FIN NOTIFICACIONES-----------------------
 
 const subirImagen = async (req, res) => {
-    const { categoria, descripcion, imagen, userId } = req.body;
-    const imagenBuffer = req.file.buffer;
+try {
+    const { categoria, descripcion } = req.body;
+    const { buffer, mimetype } = req.file;
+
+    // Crea un nuevo documento de imagen utilizando el modelo
+    const image = new Image({
+      imagen: {
+        data: buffer,
+        contentType: mimetype
+      },
+      categoria,
+      descripcion
+    });
+
+    // Guarda la imagen en la base de datos
+    await image.save();
+
+    res.status(200).json({ message: 'Imagen subida exitosamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al subir la imagen' });
+  }
+
+    /*const { categoria, descripcion, imagen, userId } = req.body;
+    const imagenBuffer = imagen.buffer;
 
     console.log(categoria);  
     console.log(descripcion);
@@ -185,7 +209,7 @@ const subirImagen = async (req, res) => {
         ok: false,
         error: error.message,
       });
-    }
+    }*/
   };
 
   const verImagen = async (req, res) => {
@@ -201,10 +225,11 @@ const subirImagen = async (req, res) => {
         });
       }
   
-      res.json({
+      /*res.json({
         ok: true,
         imagen,
-      });
+      });*/
+      res.set('Content-Type', 'image/jpeg');
     } catch (error) {
       res.status(500).json({
         ok: false,
