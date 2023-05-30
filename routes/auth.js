@@ -7,7 +7,7 @@ const router = express.Router()
 const upload = multer();
 
 const {registro, login, perfil, editarPerfil, mensajes,
-    enviarMensaje, notificacion, subirImagen, verImagen} = require('../controllers/auth')
+    enviarMensaje, notificacion, subirImagen, verImagen, verTodasLasImagenes} = require('../controllers/auth')
 
 router.post("/register",registro)
 router.post("/login",login)
@@ -19,5 +19,6 @@ router.get("/notifications",notificacion)
 
 router.post("/subirimagen", upload.single('imagen'), subirImagen)
 router.get("/verimagen/:id", verImagen)
+router.get("/verimagenes", verTodasLasImagenes);
 
 module.exports = router

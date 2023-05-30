@@ -216,7 +216,7 @@ try {
     const imagenId = req.params.id;
   
     try {
-      const imagen = await Imagen.findById(imagenId);
+      const imagen = await Image.findById(imagenId);
   
       if (!imagen) {
         return res.status(404).json({
@@ -225,11 +225,41 @@ try {
         });
       }
   
-      /*res.json({
+      res.set('Content-Type', imagen.imagen.contentType);
+      res.send(imagen.imagen.data);
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  };  
+
+  const verTodasLasImagenes = async (req, res) => {
+    try {
+      const imagenes = await Image.find();
+  
+      console.log('imagenes:', imagenes);
+
+      if (!imagenes || imagenes.length === 0) {
+        return res.status(404).json({
+          ok: false,
+          error: "No se encontraron imágenes",
+        });
+      }
+  
+      const imagesData = imagenes.map((imagen) => {
+        console.log('imagen:', imagen);
+        return {
+          data: imagen.imagen.data.toString("base64"),
+          contentType: imagen.imagen.contentType,
+        };
+      });
+  
+      res.json({
         ok: true,
-        imagen,
-      });*/
-      res.set('Content-Type', 'image/jpeg');
+        imagenes: imagesData,
+      });
     } catch (error) {
       res.status(500).json({
         ok: false,
@@ -248,5 +278,6 @@ module.exports = {
     enviarMensaje,
     notificacion,
     subirImagen,
-    verImagen
+    verImagen, 
+    verTodasLasImagenes
 }
