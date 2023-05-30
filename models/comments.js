@@ -10,11 +10,14 @@ const CommentScheme = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Client'
     },
+    timestamp: { 
+        type: Date, 
+        default: Date.now 
+    },
     image: {
         type: Schema.Types.ObjectId,
         ref: 'Image'
-    }
-    
+    },    
 },{
     toJSON: {
         virtuals: true

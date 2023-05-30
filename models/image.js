@@ -12,16 +12,13 @@ const ImageScheme = Schema({
     },
     imagen: {
         data: Buffer,
-        contentType: String,
-        required: true
+        contentType: String
     },
     likes: {
-        data: Number,
-        required: true
+        data: Number
     },
     dislikes: {
-        type: Number,
-        required: true
+        type: Number
     },
     client: {
         type: Schema.Types.ObjectId,
@@ -43,7 +40,7 @@ ImageScheme.method('toJSON', function () {
     return object
 })
 
-CommentScheme.virtual('comentarios', {
+ImageScheme.virtual('comentarios', {
     ref: "Comment",
     localField: "_id",
     foreignField: "image",

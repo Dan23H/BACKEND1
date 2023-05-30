@@ -2,17 +2,17 @@ const express = require("express");
 require('dotenv').config();
 const cors = require('cors');
 const { dbConnection } = require('./database/config');
-const { disconnect } = require("process");
-
+const { socketController } = require("../sockets/controller");
 
 class Server {
     constructor() {
         this.headers = {
             cors: {
-                origin: "",
+                origin: "http://localhost:4000",
                 methods: ["GET", "POST"]
             }
         }
+
         // Crear Express App
         this.app = express()
         this.port = process.env.PORT
@@ -51,6 +51,7 @@ class Server {
 
     sockets() {
         this.io.on('connection', socket => {
+            socketController(socket,this.io)
             console.log('Cliente conectado', socket.id)
             socket.on('disconnect', () => {
                 console.log('Cliente desconectado') 
@@ -60,8 +61,8 @@ class Server {
 
     listen() {
         this.app.listen(process.env.PORT, () => {
-            Puerto = process.env.PORT || 4000
-            console.log(`Servidor corriendo en puerto: ${Puerto}`)
+            port = process.env.PORT || 27000
+            console.log(`Servidor corriendo en puerto: ${port}`)
         })
     }
 }

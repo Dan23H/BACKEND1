@@ -1,6 +1,7 @@
 const express = require('express');
 const Cliente = require('../models/cliente')
 const Imagen = require('../models/image');
+const Chat = require('../models/chat')
 
 //------------PANTALLA DE LOGIN O REGISTRO-----------------------------
 const registro = async (req, res = express.request) => {
@@ -130,24 +131,6 @@ const editarPerfil = async (req, res = express.request) => {
 }
 //--------------FIN PERFIL---------------------------------
 
-//----------------MENSAJES---------------------------------
-const mensajes = (req, res = express.request) => {
-    const { fotoPerfil, usuario, asunto } = req.body;
-    res.status(200).json({
-        ok: true,
-        messages
-    })
-}
-
-const enviarMensaje = (req, res = express.request) => {
-    const { destinatario, asunto, descripcion } = req.body;
-    res.status(200).json({
-        ok: true,
-        sendMsg
-    })
-}
-//---------------FIN MENSAJES------------------------------
-
 //----------------NOTIFICACIONES---------------------------
 const notificacion = (req, res = express.request) => {
     const { imagen, descripcion } = req.body;
@@ -220,8 +203,6 @@ module.exports = {
     login,
     perfil,
     editarPerfil,
-    mensajes,
-    enviarMensaje,
     notificacion,
     subirImagen,
     verImagen
