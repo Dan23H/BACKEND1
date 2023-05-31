@@ -8,7 +8,7 @@ class Server {
     constructor() {
         this.headers = {
             cors: {
-                origin: "https://drawers7t.netlify.app",
+                origin: "https://localhost:5173",
                 methods: ["GET", "POST"]
             }
         }
