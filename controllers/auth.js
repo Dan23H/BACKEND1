@@ -223,8 +223,8 @@ try {
           error: 'Imagen no encontrada',
         });
       }
-  
       res.set('Content-Type', imagen.imagen.contentType);
+
       res.send({
         'id': imagen.id,
         'descripcion': imagen.descripcion,
