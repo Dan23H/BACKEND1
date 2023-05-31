@@ -16,8 +16,7 @@ const ImageScheme = new mongoose.Schema({
             required: true
         },
         contentType: {
-            type: String,
-            reqwuired: true
+            type: String
         }
     },
     user: {

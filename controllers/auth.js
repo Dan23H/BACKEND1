@@ -226,7 +226,14 @@ try {
       }
   
       res.set('Content-Type', imagen.imagen.contentType);
-      res.send(imagen.imagen.data);
+      res.send({
+        'descripcion': imagen.descripcion,
+        'categoria': imagen.categoria,
+        'imagen': {
+          'data': imagen.imagen.data,
+          'contentType': imagen.imagen.contentType
+        }
+      });
     } catch (error) {
       res.status(500).json({
         ok: false,
@@ -238,8 +245,6 @@ try {
   const verTodasLasImagenes = async (req, res) => {
     try {
       const imagenes = await Image.find();
-  
-      console.log('imagenes:', imagenes);
 
       if (!imagenes || imagenes.length === 0) {
         return res.status(404).json({
@@ -249,10 +254,14 @@ try {
       }
   
       const imagesData = imagenes.map((imagen) => {
-        console.log('imagen:', imagen);
-        return {
-          data: imagen.imagen.data.toString("base64"),
-          contentType: imagen.imagen.contentType,
+        return{
+          'id': imagen.id,
+          'descripcion': imagen.descripcion,
+          'categoria': imagen.categoria,
+          'imagen': {
+            'data': imagen.imagen.data.toString("base64"),
+            'contentType': imagen.imagen.contentType
+          }
         };
       });
   
