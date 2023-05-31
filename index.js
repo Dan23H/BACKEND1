@@ -7,7 +7,9 @@ const { dbConnection } = require('./database/config')
 
 //Crear Express App
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173"
+}));
 
 //Database
 dbConnection()
