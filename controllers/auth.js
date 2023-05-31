@@ -1,6 +1,7 @@
 const express = require('express');
-const Cliente = require('../models/cliente')
-const Imagen = require('../models/image');
+const Cliente = require('../models/cliente');
+const Image = require('../models/image');
+const upload = require('../libs/storage');
 
 //------------PANTALLA DE LOGIN O REGISTRO-----------------------------
 const registro = async (req, res = express.request) => {
@@ -159,13 +160,40 @@ const notificacion = (req, res = express.request) => {
 //----------------FIN NOTIFICACIONES-----------------------
 
 const subirImagen = async (req, res) => {
-    const { categoria, descripcion, imagen, userId } = req.body;
-    console.log('categoria');  
+try {
+    const { categoria, descripcion } = req.body;
+    const { buffer, mimetype } = req.file;
+
+    // Crea un nuevo documento de imagen utilizando el modelo
+    const image = new Image({
+      imagen: {
+        data: buffer,
+        contentType: mimetype
+      },
+      categoria,
+      descripcion
+    });
+
+    // Guarda la imagen en la base de datos
+    await image.save();
+
+    res.status(200).json({ message: 'Imagen subida exitosamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al subir la imagen' });
+  }
+
+    /*const { categoria, descripcion, imagen, userId } = req.body;
+    const imagenBuffer = imagen.buffer;
+
+    console.log(categoria);  
+    console.log(descripcion);
+    console.log(imagen)
     try {
       const nuevaImagen = new Imagen({
         categoria,
         descripcion,
-        imagen,
+        imagen: imagenBuffer,
         user: userId,
       });
   
@@ -181,15 +209,14 @@ const subirImagen = async (req, res) => {
         ok: false,
         error: error.message,
       });
-    }
+    }*/
   };
 
   const verImagen = async (req, res) => {
-    const imagenId = req.params.id;
-  
     try {
-      const imagen = await Imagen.findById(imagenId);
-  
+      const imagen = await Image.findById(req.body.id);
+      console.log(imagen)
+      
       if (!imagen) {
         return res.status(404).json({
           ok: false,
@@ -197,9 +224,49 @@ const subirImagen = async (req, res) => {
         });
       }
   
+      res.set('Content-Type', imagen.imagen.contentType);
+      res.send({
+        'id': imagen.id,
+        'descripcion': imagen.descripcion,
+        'categoria': imagen.categoria,
+        'imagen': {
+          'data': imagen.imagen.data,
+          'contentType': imagen.imagen.contentType
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        error: error.message,
+      });
+    }
+  };  
+
+  const verTodasLasImagenes = async (req, res) => {
+    try {
+      const imagenes = await Image.find();
+      if (!imagenes || imagenes.length === 0) {
+        return res.status(404).json({
+          ok: false,
+          error: "No se encontraron imágenes",
+        });
+      }
+  
+      const imagesData = imagenes.map((imagen) => {
+        return{
+          'id': imagen.id,
+          'descripcion': imagen.descripcion,
+          'categoria': imagen.categoria,
+          'imagen': {
+            'data': imagen.imagen.data.toString("base64"),
+            'contentType': imagen.imagen.contentType
+          }
+        };
+      });
+  
       res.json({
         ok: true,
-        imagen,
+        imagenes: imagesData,
       });
     } catch (error) {
       res.status(500).json({
@@ -219,5 +286,6 @@ module.exports = {
     enviarMensaje,
     notificacion,
     subirImagen,
-    verImagen
+    verImagen, 
+    verTodasLasImagenes
 }
