@@ -48,7 +48,7 @@ class Server {
 
     listen() {
         this.server.listen(process.env.PORT, () => {
-            const port = process.env.PORT || 8080;
+            const port = process.env.PORT || 27000;
             console.log(`Servidor corriendo en puerto: ${port}`);
           });
     }
