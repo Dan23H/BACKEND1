@@ -60,10 +60,10 @@ class Server {
     }
 
     listen() {
-        this.app.listen(process.env.PORT, () => {
-            port = process.env.PORT || 8080
-            console.log(`Servidor corriendo en puerto: ${port}`)
-        })
+        this.server.listen(process.env.PORT, () => {
+            const port = process.env.PORT || 8080;
+            console.log(`Servidor corriendo en puerto: ${port}`);
+          });
     }
 }
 
