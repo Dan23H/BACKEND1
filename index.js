@@ -5,7 +5,7 @@ const multer = require('multer');
 const sharp = require('sharp')
 const { dbConnection } = require('./database/config')
 
-//Crear Express App
+//Crear Express App 
 const app = express();
 app.use(cors());
 
@@ -31,6 +31,6 @@ app.get('/test', (req, res) => {
 
 //Escuchar en puerto 4000
 app.listen(process.env.PORT, () => {
-    Puerto = process.env.PORT
+    Puerto = process.env.PORT || 4000
     console.log(`Servidor corriendo en puerto: ${Puerto}`)
 })
