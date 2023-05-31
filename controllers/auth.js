@@ -213,11 +213,10 @@ try {
   };
 
   const verImagen = async (req, res) => {
-    const imagenId = req.params.id;
-  
     try {
-      const imagen = await Image.findById(imagenId);
-  
+      const imagen = await Image.findById(req.body.id);
+      console.log(imagen)
+      
       if (!imagen) {
         return res.status(404).json({
           ok: false,
@@ -227,6 +226,7 @@ try {
   
       res.set('Content-Type', imagen.imagen.contentType);
       res.send({
+        'id': imagen.id,
         'descripcion': imagen.descripcion,
         'categoria': imagen.categoria,
         'imagen': {
@@ -245,7 +245,6 @@ try {
   const verTodasLasImagenes = async (req, res) => {
     try {
       const imagenes = await Image.find();
-
       if (!imagenes || imagenes.length === 0) {
         return res.status(404).json({
           ok: false,

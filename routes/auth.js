@@ -19,6 +19,6 @@ const {registro, login, perfil, editarPerfil, mensajes,
     
     router.post("/subirimagen", upload.single('imagen'), subirImagen)
     router.get("/imagenes", verTodasLasImagenes);
-    router.get("/image?id", verImagen)
+    router.get("/image", verImagen)
 
 module.exports = router
