@@ -1,9 +1,7 @@
 const express = require("express");
 require('dotenv').config();
 const cors = require('cors');
-const { dbConnection } = require('./database/config');
-const { socketController } = require("../sockets/controller");
-
+const { dbConnection } = require('../database/config');
 class Server {
     constructor() {
         this.headers = {
@@ -17,7 +15,6 @@ class Server {
         this.app = express()
         this.port = process.env.PORT
         this.server = require('http').createServer(this.app)
-        this.io = require('socket.io')(this.server, this.headers)
 
         this.paths = {
             auth: "/api"
@@ -27,7 +24,6 @@ class Server {
         this.addMiddlewares()
         this.setRoutes()
 
-        this.sockets()
     }
 
     // Base de Datos
@@ -46,17 +42,7 @@ class Server {
 
     setRoutes() {
         // Ruta
-        this.app.use('/', require('./routes/auth'))
-    }
-
-    sockets() {
-        this.io.on('connection', socket => {
-            socketController(socket,this.io)
-            console.log('Cliente conectado', socket.id)
-            socket.on('disconnect', () => {
-                console.log('Cliente desconectado') 
-            })
-        })
+        this.app.use('/', require('../routes/auth'))
     }
 
     listen() {
